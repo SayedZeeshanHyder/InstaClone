@@ -25,6 +25,7 @@ class ProfileScreen extends StatelessWidget {
         List followers = data!['followers'];
         List posts = data!['posts'];
         List following = data!['following'];
+        final String bio = data!['bio'];
 
         return SingleChildScrollView(
           child: Column(

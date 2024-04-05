@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -53,6 +54,8 @@ class _NavigationFileState extends State<NavigationFile> {
     ),
   ];
 
+  final auth = FirebaseAuth.instance;
+
   final bottomNavItems = [
     BottomNavigationBarItem(icon: SizedBox(width: 20,height: 20,child: SvgPicture.asset('assets/icons/homeOutline.svg',fit: BoxFit.contain,),),activeIcon: SizedBox(width: 20,height: 20,child: SvgPicture.asset('assets/icons/homeFilled.svg')),label: ""),
     const BottomNavigationBarItem(icon: Icon(CupertinoIcons.search),label: "",),
@@ -91,12 +94,44 @@ class _NavigationFileState extends State<NavigationFile> {
       endDrawer: currentIndex == 4 ? Drawer(
         child: Column(
           children: [
+            SizedBox(
+              height: size.height*0.05,
+            ),
             ListTile(
-              onTap: (){
-                Get.back();
-                Get.off(()=>Login(),transition: Transition.fade);
-              },
-              title: Text("Logout"),
+              title: Text(auth.currentUser!.displayName.toString()),
+            ),
+            ListTile(
+              leading: Icon(Icons.history),
+              title: Text("Archieve"),
+            ),
+            ListTile(
+              leading: Icon(FontAwesomeIcons.clock),
+              title: Text("Your Activity"),
+            ),
+            ListTile(
+              leading: Icon(FontAwesomeIcons.userTag),
+              title: Text("NameTag"),
+            ),
+            ListTile(
+              leading: Icon(Icons.bookmark_border),
+              title: Text("Saved"),
+            ),
+            ListTile(
+              leading: Icon(Icons.format_list_bulleted),
+              title: Text("Close Friends"),
+            ),
+            ListTile(
+              leading: Icon(Icons.person_add),
+              title: Text("Discover People"),
+            ),
+            ListTile(
+              leading: Icon(Icons.facebook),
+              title: Text("Open Facebook"),
+            ),
+            Spacer(),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text("Settings"),
             ),
           ],
         ),
