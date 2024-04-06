@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:instaclone/screens/profile/editprofile.dart';
 
 class ProfileScreen extends StatelessWidget {
 
@@ -26,6 +30,7 @@ class ProfileScreen extends StatelessWidget {
         List posts = data!['posts'];
         List following = data!['following'];
         final String bio = data!['bio'];
+        final String name = data!['name'];
 
         return SingleChildScrollView(
           child: Column(
@@ -66,25 +71,31 @@ class ProfileScreen extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.only(left: size.width*0.1,top: size.height*0.015),
-                child: Text("Name",style: TextStyle(fontWeight: FontWeight.bold,fontSize: size.width*0.055),),
+                child: Text(name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: size.width*0.055),),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: size.width*0.1),
-                child: Text("This is the Bio of the User he can write whatever he wants This is the Bio of the User he can write whatever he wants This is the Bio of the User he can write whatever he wants This is the Bio of the User he can write whatever he wants This is the Bio of the User he can write whatever he wants This is the Bio of the User he can write whatever he wants",maxLines: 2,),
+                child: Text(bio,maxLines: 2,),
               ),
 
               SizedBox(
                 height: size.height*0.02,
               ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: size.width*0.075),
-                width: double.infinity,
-                height: size.height*0.045,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey.shade400)
+              InkWell(
+                splashFactory: NoSplash.splashFactory,
+                onTap: (){
+                  Get.to(()=>EditProfile(),transition: Transition.rightToLeft);
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: size.width*0.075),
+                  width: double.infinity,
+                  height: size.height*0.045,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey.shade400)
+                  ),
+                  child: const Text("Edit Profile",style: TextStyle(fontWeight: FontWeight.w500),),
                 ),
-                child: const Text("Edit Profile",style: TextStyle(fontWeight: FontWeight.w500),),
               ),
 
               SizedBox(
@@ -145,6 +156,17 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              /*ContainedTabBarView(
+                tabBarViewProperties: TabBarViewProperties(physics: NeverScrollableScrollPhysics(),),
+                  tabs: [
+                    Icon(Icons.grid_on),
+                    Icon(Icons.person_pin_outlined)
+                  ],
+                  views: [
+                    Text("Posts Screen"),
+                    Text("Tags Screen"),
+                  ],
+              ),*/
             ],
           ),
         );

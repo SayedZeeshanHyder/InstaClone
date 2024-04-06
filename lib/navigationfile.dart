@@ -20,6 +20,7 @@ class NavigationFile extends StatefulWidget
 class _NavigationFileState extends State<NavigationFile> {
   int currentIndex = 0;
 
+  static final auth = FirebaseAuth.instance;
   final List<PreferredSizeWidget?> appBars = [
     AppBar(
       title: Text("Instagram",style: TextStyle(fontWeight: FontWeight.bold),),
@@ -50,11 +51,9 @@ class _NavigationFileState extends State<NavigationFile> {
     null,
     AppBar(
       centerTitle: true,
-      title: Text("thelegend101z"),
+      title: Text(auth.currentUser!.displayName.toString()),
     ),
   ];
-
-  final auth = FirebaseAuth.instance;
 
   final bottomNavItems = [
     BottomNavigationBarItem(icon: SizedBox(width: 20,height: 20,child: SvgPicture.asset('assets/icons/homeOutline.svg',fit: BoxFit.contain,),),activeIcon: SizedBox(width: 20,height: 20,child: SvgPicture.asset('assets/icons/homeFilled.svg')),label: ""),
