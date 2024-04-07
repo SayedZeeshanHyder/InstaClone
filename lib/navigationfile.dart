@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:instaclone/screens/Post/addpost.dart';
 import 'package:instaclone/screens/auth/login.dart';
+import 'package:instaclone/screens/chat/chatlist.dart';
 import 'package:instaclone/screens/home/home.dart';
 import 'package:instaclone/screens/likes/likes.dart';
 import 'package:instaclone/screens/profile/profile.dart';
@@ -38,7 +39,9 @@ class _NavigationFileState extends State<NavigationFile> {
           ),
         ),
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.to(()=>ChatList(),transition: Transition.rightToLeft);
+          },
           icon: Icon(
             FontAwesomeIcons.paperPlane,
             size: 22,
@@ -55,12 +58,13 @@ class _NavigationFileState extends State<NavigationFile> {
     ),
   ];
 
+
   final bottomNavItems = [
     BottomNavigationBarItem(icon: SizedBox(width: 20,height: 20,child: SvgPicture.asset('assets/icons/homeOutline.svg',fit: BoxFit.contain,),),activeIcon: SizedBox(width: 20,height: 20,child: SvgPicture.asset('assets/icons/homeFilled.svg')),label: ""),
     const BottomNavigationBarItem(icon: Icon(CupertinoIcons.search),label: "",),
     const BottomNavigationBarItem(icon: Icon(Icons.add_box_outlined),label: ''),
     const BottomNavigationBarItem(icon: Icon(CupertinoIcons.heart),activeIcon: Icon(CupertinoIcons.heart_fill),label: ""),
-    const BottomNavigationBarItem(icon: CircleAvatar(radius: 16,backgroundImage: NetworkImage('https://upload.wikimedia.org/wikipedia/commons/6/6e/Shah_Rukh_Khan_graces_the_launch_of_the_new_Santro.jpg'),),label: "",),
+    BottomNavigationBarItem(icon: CircleAvatar(radius: 16,child: auth.currentUser!.photoURL.toString() == "" ? Icon(Icons.person) : null,),label: "",),
   ];
 
   final List<Widget> Screens = [
@@ -72,7 +76,6 @@ class _NavigationFileState extends State<NavigationFile> {
   ];
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
@@ -128,6 +131,16 @@ class _NavigationFileState extends State<NavigationFile> {
               title: Text("Open Facebook"),
             ),
             Spacer(),
+            ListTile(
+              onTap: (){
+                auth.signOut().then((value){
+                  Get.back();
+                  Get.off(()=> Login());
+                });
+              },
+              leading: Icon(Icons.logout),
+              title: Text("LogOut"),
+            ),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text("Settings"),

@@ -8,9 +8,17 @@ class UserModel {
   List<String>? searchHistory;
   List<Posts>? posts;
   String? bio;
+  String? webLink;
+  String? email;
+  String? phone;
+  String? gender;
+  String? uid;
 
   UserModel(
       {this.name,
+        this.email,
+        this.phone,
+        this.gender,
         this.profileUrl,
         this.followers,
         this.following,
@@ -18,22 +26,29 @@ class UserModel {
         this.heartActivities,
         this.searchHistory,
         this.bio,
+        this.webLink,
+        this.uid,
         this.posts});
 
   UserModel.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    bio = json["bio"];
-    profileUrl = json['profileUrl'];
-    followers = json['followers'].cast<String>();
-    following = json['following'].cast<String>();
-    createdAt = json['createdAt'];
+    name = json['name'] ?? "";
+    uid = json['uid'] ?? "";
+    webLink = json['webLink'] ?? "";
+    phone = json['phone'] ?? "";
+    gender = json['gender'] ?? "";
+    email = json['email'] ?? "";
+    bio = json["bio"] ?? "";
+    profileUrl = json['profileUrl'] ?? "";
+    followers = json['followers'].cast<String>() ?? [];
+    following = json['following'].cast<String>() ?? [];
+    createdAt = json['createdAt'] ?? DateTime.now();
     if (json['heartActivities'] != null) {
       heartActivities = <HeartActivities>[];
       json['heartActivities'].forEach((v) {
         heartActivities!.add(HeartActivities.fromJson(v));
       });
     }
-    searchHistory = json['searchHistory'].cast<String>();
+    searchHistory = json['searchHistory'].cast<String>() ?? [];
     if (json['posts'] != null) {
       posts = <Posts>[];
       json['posts'].forEach((v) {
@@ -45,9 +60,13 @@ class UserModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
+    data['gender'] = gender;
+    data['phone'] = phone;
+    data['webLink'] = webLink;
+    data['email'] = email;
     data['bio'] = bio;
-    // ignore: unnecessary_this
-    data['profileUrl'] = this.profileUrl;
+    data['uid'] = uid;
+    data['profileUrl'] = profileUrl;
     data['followers'] = followers;
     data['following'] = following;
     data['createdAt'] = createdAt;
@@ -86,17 +105,23 @@ class HeartActivities {
 }
 
 class Posts {
+  String? postId;
   String? caption;
   List<String>? img;
   List<String>? likes;
   List<Comments>? comments;
+  bool? isImg;
+  String? userUid;
+  int? shares;
 
-  Posts({this.caption, this.img, this.likes, this.comments});
+  Posts({this.caption, this.img, this.likes, this.comments,this.userUid,this.isImg,this.shares,this.postId});
 
   Posts.fromJson(Map<String, dynamic> json) {
-    caption = json['caption'];
-    img = json['img'].cast<String>();
-    likes = json['likes'].cast<String>();
+    userUid = json['userUid'] ?? "";
+    isImg = json['isImg'] ?? false;
+    caption = json['caption'] ?? "";
+    img = json['img'].cast<String>() ?? [];
+    likes = json['likes'].cast<String>() ?? [];
     if (json['comments'] != null) {
       comments = <Comments>[];
       json['comments'].forEach((v) {
@@ -108,6 +133,10 @@ class Posts {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['caption'] = caption;
+    data['userUid'] = userUid;
+    data['shares'] = shares;
+    data['postId'] = postId;
+    data['isImg'] = isImg;
     data['img'] = img;
     data['likes'] = likes;
     if (comments != null) {

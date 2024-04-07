@@ -15,7 +15,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("Users").doc(auth.currentUser!.displayName).snapshots(),
+      stream: FirebaseFirestore.instance.collection("Users").doc(auth.currentUser!.uid).snapshots(),
       builder: (context, snapshot) {
 
         if(snapshot.connectionState == ConnectionState.waiting)
@@ -31,6 +31,11 @@ class ProfileScreen extends StatelessWidget {
         List following = data!['following'];
         final String bio = data!['bio'];
         final String name = data!['name'];
+        final String webLink = data!['webLink'];
+        final String email = data!['email'];
+        final String phone = data!['phone'];
+        final String gender = data!['gender'];
+        final String profileUrl = data!['profileUrl'];
 
         return SingleChildScrollView(
           child: Column(
@@ -84,7 +89,7 @@ class ProfileScreen extends StatelessWidget {
               InkWell(
                 splashFactory: NoSplash.splashFactory,
                 onTap: (){
-                  Get.to(()=>EditProfile(),transition: Transition.rightToLeft);
+                  Get.to(()=>EditProfile(data: data,),transition: Transition.rightToLeft);
                 },
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: size.width*0.075),

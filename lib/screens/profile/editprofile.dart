@@ -1,27 +1,32 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EditProfile extends StatelessWidget {
+
+  final Map<String,dynamic> data;
+  EditProfile({required this.data});
+  final auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Edit Profile"),
+        title: const Text("Edit Profile"),
         centerTitle: true,
         leading: InkWell(
           onTap: () {
             Get.back();
           },
-          child: Center(
+          child: const Center(
             child: Text("Cancel"),
           ),
         ),
         actions: [
           TextButton(
-            onPressed: () {},
-            child: Text("Done"),
+            onPressed: updateUserInfo,
+            child: const Text("Done"),
           ),
         ],
       ),
@@ -65,40 +70,14 @@ class EditProfile extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: TextField(
+                    child: TextFormField(
+                      initialValue: data['name'],
+                      onChanged: (value)async{
+                        data['name']=value;
+                      },
                       maxLines: null,
                       decoration: InputDecoration(
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.white)
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey.shade400)
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width*0.09,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: size.width * 0.05,
-                  ),
-                  SizedBox(
-                    width: size.width * 0.26,
-                    child: Text(
-                      "Username",
-                      style: TextStyle(fontSize: size.width * 0.04),
-                    ),
-                  ),
-                  Expanded(
-                    child: TextField(
-                      maxLines: null,
-                      decoration: InputDecoration(
-                        border: UnderlineInputBorder(
+                        border: const UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)
                         ),
                         enabledBorder: UnderlineInputBorder(
@@ -125,10 +104,14 @@ class EditProfile extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: TextField(
+                    child: TextFormField(
+                      onChanged: (value){
+                        data['webLink']=value;
+                      },
+                      initialValue: data['webLink'],
                       maxLines: null,
                       decoration: InputDecoration(
-                        border: UnderlineInputBorder(
+                        border: const UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)
                         ),
                         enabledBorder: UnderlineInputBorder(
@@ -155,10 +138,14 @@ class EditProfile extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: TextField(
+                    child: TextFormField(
+                      onChanged: (value){
+                        data['bio']=value;
+                      },
+                      initialValue: data['bio'],
                       maxLines: null,
                       decoration: InputDecoration(
-                        border: UnderlineInputBorder(
+                        border: const UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)
                         ),
                         enabledBorder: UnderlineInputBorder(
@@ -222,10 +209,14 @@ class EditProfile extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: TextField(
+                    child: TextFormField(
+                      onChanged: (value){
+                        data['email']=value;
+                      },
+                      initialValue: data['email'],
                       maxLines: null,
                       decoration: InputDecoration(
-                        border: UnderlineInputBorder(
+                        border: const UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)
                         ),
                         enabledBorder: UnderlineInputBorder(
@@ -252,10 +243,14 @@ class EditProfile extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: TextField(
+                    child: TextFormField(
+                      onChanged: (value){
+                        data['phone']=value;
+                      },
+                      initialValue: data['phone'],
                       maxLines: null,
                       decoration: InputDecoration(
-                        border: UnderlineInputBorder(
+                        border: const UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)
                         ),
                         enabledBorder: UnderlineInputBorder(
@@ -282,10 +277,14 @@ class EditProfile extends StatelessWidget {
                     ),
                   ),
                   Expanded(
-                    child: TextField(
+                    child: TextFormField(
+                      onChanged: (value){
+                        data['gender']=value;
+                      },
+                      initialValue: data['gender'],
                       maxLines: null,
                       decoration: InputDecoration(
-                        border: UnderlineInputBorder(
+                        border: const UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.white)
                         ),
                         enabledBorder: UnderlineInputBorder(
@@ -304,5 +303,15 @@ class EditProfile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  updateUserInfo()
+  async{
+    await auth.currentUser!.updateDisplayName(data['name']);
+    FirebaseFirestore.instance.collection("Users").doc(data['uid']).update(data).then((value){
+      Get.back();
+    }).onError((error, stackTrace){
+      print(error.toString());
+    });
   }
 }

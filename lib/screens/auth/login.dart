@@ -52,7 +52,7 @@ class Login extends StatelessWidget {
                   controller: userNameController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.person),
-                    hintText: "Enter Username",
+                    hintText: "Enter Email",
                     border: InputBorder.none,
                   ),
                 ),

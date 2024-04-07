@@ -54,7 +54,7 @@ class SignUp extends StatelessWidget {
                   controller: userNameController,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.person),
-                    hintText: "Enter Username",
+                    hintText: "Enter Email",
                     border: InputBorder.none,
                   ),
                 ),
@@ -121,13 +121,13 @@ class SignUp extends StatelessWidget {
                         passwordController.text.isNotEmpty) {
                       auth
                           .createUserWithEmailAndPassword(
-                              email: "${userNameController.text}@gmail.com",
+                              email: userNameController.text,
                               password: passwordController.text)
                           .then((value) async {
 
-                        final map = {"name": userNameController.text, "profileUrl": "", "followers": [], "following": [], "createdAt": DateTime.now(), "searchHistory": [],'posts':[],'heartAct':[],'bio':"Hello I am ${userNameController.text}"};
+                        final map = {"email":userNameController.text,"uid":value.user!.uid, "profileUrl": "", "followers": [], "following": [], "createdAt": DateTime.now(), "searchHistory": [],'posts':[],'heartAct':[],'bio':"Hello I am ${userNameController.text}"};
                         UserModel userModel = UserModel.fromJson(map);
-                        await userCollection.doc(userNameController.text).set(userModel.toJson());
+                        await userCollection.doc(value.user!.uid).set(userModel.toJson());
                         value.user!
                             .updateDisplayName(userNameController.text)
                             .then((value) {
