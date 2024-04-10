@@ -1,13 +1,28 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
-class EditProfile extends StatelessWidget {
+class EditProfile extends StatefulWidget {
 
   final Map<String,dynamic> data;
   EditProfile({required this.data});
+
+  @override
+  State<EditProfile> createState() => _EditProfileState();
+}
+
+class _EditProfileState extends State<EditProfile> {
+  final storageRef = FirebaseStorage.instance.ref("profilePhoto");
+
+  final firestoreRef = FirebaseFirestore.instance.collection("Users");
+
   final auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -39,13 +54,43 @@ class EditProfile extends StatelessWidget {
               ),
               CircleAvatar(
                 radius: size.width * 0.2,
+                backgroundImage: NetworkImage(widget.data['profileUrl']),
               ),
               SizedBox(
                 height: size.height * 0.023,
               ),
               InkWell(
                 splashFactory: NoSplash.splashFactory,
-                onTap: () {},
+                onTap: () async{
+                  final pickedImg = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+
+                  showDialog(context: context, builder: (context){
+                    return AlertDialog(
+                      content: SizedBox(
+                        width: size.width*0.7,
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            CircularProgressIndicator(color: Colors.blue,),
+                            Text("Update Profile Photo"),
+                          ],
+                        ),
+                      ),
+                    );
+                  });
+
+                  if(pickedImg!=null)
+                  {
+                    final uid = auth.currentUser!.uid;
+                    final path = pickedImg.path;
+                    final uploadTask = await storageRef.child(uid).putFile(File(path));
+                    final downloadUrl = await uploadTask.ref.getDownloadURL();
+                    widget.data['profileUrl'] = downloadUrl;
+                    await auth.currentUser!.updatePhotoURL(downloadUrl);
+                    Get.back();
+                  }
+                  setState(() {});
+                },
                 child: Text(
                   "Change Profile Photo",
                   style: TextStyle(
@@ -71,9 +116,9 @@ class EditProfile extends StatelessWidget {
                   ),
                   Expanded(
                     child: TextFormField(
-                      initialValue: data['name'],
+                      initialValue: widget.data['name'],
                       onChanged: (value)async{
-                        data['name']=value;
+                        widget.data['name']=value;
                       },
                       maxLines: null,
                       decoration: InputDecoration(
@@ -106,9 +151,9 @@ class EditProfile extends StatelessWidget {
                   Expanded(
                     child: TextFormField(
                       onChanged: (value){
-                        data['webLink']=value;
+                        widget.data['webLink']=value;
                       },
-                      initialValue: data['webLink'],
+                      initialValue: widget.data['webLink'],
                       maxLines: null,
                       decoration: InputDecoration(
                         border: const UnderlineInputBorder(
@@ -140,9 +185,9 @@ class EditProfile extends StatelessWidget {
                   Expanded(
                     child: TextFormField(
                       onChanged: (value){
-                        data['bio']=value;
+                        widget.data['bio']=value;
                       },
-                      initialValue: data['bio'],
+                      initialValue: widget.data['bio'],
                       maxLines: null,
                       decoration: InputDecoration(
                         border: const UnderlineInputBorder(
@@ -211,9 +256,9 @@ class EditProfile extends StatelessWidget {
                   Expanded(
                     child: TextFormField(
                       onChanged: (value){
-                        data['email']=value;
+                        widget.data['email']=value;
                       },
-                      initialValue: data['email'],
+                      initialValue: widget.data['email'],
                       maxLines: null,
                       decoration: InputDecoration(
                         border: const UnderlineInputBorder(
@@ -245,9 +290,9 @@ class EditProfile extends StatelessWidget {
                   Expanded(
                     child: TextFormField(
                       onChanged: (value){
-                        data['phone']=value;
+                        widget.data['phone']=value;
                       },
-                      initialValue: data['phone'],
+                      initialValue: widget.data['phone'],
                       maxLines: null,
                       decoration: InputDecoration(
                         border: const UnderlineInputBorder(
@@ -279,9 +324,9 @@ class EditProfile extends StatelessWidget {
                   Expanded(
                     child: TextFormField(
                       onChanged: (value){
-                        data['gender']=value;
+                        widget.data['gender']=value;
                       },
-                      initialValue: data['gender'],
+                      initialValue: widget.data['gender'],
                       maxLines: null,
                       decoration: InputDecoration(
                         border: const UnderlineInputBorder(
@@ -307,8 +352,8 @@ class EditProfile extends StatelessWidget {
 
   updateUserInfo()
   async{
-    await auth.currentUser!.updateDisplayName(data['name']);
-    FirebaseFirestore.instance.collection("Users").doc(data['uid']).update(data).then((value){
+    await auth.currentUser!.updateDisplayName(widget.data['name']);
+    FirebaseFirestore.instance.collection("Users").doc(widget.data['uid']).update(widget.data).then((value){
       Get.back();
     }).onError((error, stackTrace){
       print(error.toString());

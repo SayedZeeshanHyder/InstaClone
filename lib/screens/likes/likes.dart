@@ -8,24 +8,21 @@ class LikesScreen extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        SizedBox(
-          height: size.height*0.05,
-        ),
-        Expanded(
-          child: ContainedTabBarView(
-              tabs: [
-                Text("Following"),
-                Text("You")
-              ],
-              views: [
-                Following(),
-                You(),
-              ],
-          ),
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Likes"),
+      ),
+      body: ContainedTabBarView(
+          tabs: [
+            Text("Following"),
+            Text("You")
+          ],
+          views: [
+            Following(),
+            You(),
+          ],
+      ),
     );
   }
 

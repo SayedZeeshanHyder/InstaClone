@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:instaclone/navigationfile.dart';
 import 'package:instaclone/screens/auth/login.dart';
+import 'package:instaclone/screens/details/setdetails.dart';
 class SplashScreen extends StatelessWidget
 {
   final auth = FirebaseAuth.instance;
@@ -15,10 +16,17 @@ class SplashScreen extends StatelessWidget
         future: Future.delayed(const Duration(seconds: 4),(){
           if(auth.currentUser!=null)
             {
-              Get.off(NavigationFile(),transition: Transition.fadeIn);
+              if(auth.currentUser!.photoURL != null)
+                {
+                  Get.off(()=>NavigationFile(),transition: Transition.fadeIn);
+                }
+              else
+                {
+                  Get.off(()=>SetDetails(),transition: Transition.fadeIn);
+                }
             }
           else{
-            Get.off(Login(),transition: Transition.fadeIn);
+            Get.off(()=>Login(),transition: Transition.fadeIn);
           }
         }),
         builder: (context,snapshot){

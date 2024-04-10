@@ -9,7 +9,6 @@ class HomePosts extends StatelessWidget
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Divider(color: Colors.grey.shade300,),
         Row(
           children: [
             SizedBox(
@@ -80,7 +79,14 @@ class HomePosts extends StatelessWidget
               ],
             ),
           ),
-        )
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: size.width*0.04),
+          child: Text("2 comments",style: TextStyle(color: Colors.grey),),
+        ),
+        SizedBox(
+          height: size.height*0.02,
+        ),
       ],
     );
   }

@@ -10,6 +10,7 @@ import 'package:instaclone/screens/chat/chatlist.dart';
 import 'package:instaclone/screens/home/home.dart';
 import 'package:instaclone/screens/likes/likes.dart';
 import 'package:instaclone/screens/profile/profile.dart';
+import 'package:instaclone/screens/reels/reelssection.dart';
 import 'package:instaclone/screens/search/search.dart';
 
 class NavigationFile extends StatefulWidget
@@ -32,9 +33,11 @@ class _NavigationFileState extends State<NavigationFile> {
       ),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Get.to(()=>LikesScreen(),transition: Transition.rightToLeft);
+          },
           icon: Icon(
-            Icons.live_tv_rounded,
+            CupertinoIcons.heart,
             size: 24,
           ),
         ),
@@ -63,15 +66,15 @@ class _NavigationFileState extends State<NavigationFile> {
     BottomNavigationBarItem(icon: SizedBox(width: 20,height: 20,child: SvgPicture.asset('assets/icons/homeOutline.svg',fit: BoxFit.contain,),),activeIcon: SizedBox(width: 20,height: 20,child: SvgPicture.asset('assets/icons/homeFilled.svg')),label: ""),
     const BottomNavigationBarItem(icon: Icon(CupertinoIcons.search),label: "",),
     const BottomNavigationBarItem(icon: Icon(Icons.add_box_outlined),label: ''),
-    const BottomNavigationBarItem(icon: Icon(CupertinoIcons.heart),activeIcon: Icon(CupertinoIcons.heart_fill),label: ""),
-    BottomNavigationBarItem(icon: CircleAvatar(radius: 16,child: auth.currentUser!.photoURL.toString() == "" ? Icon(Icons.person) : null,),label: "",),
+    const BottomNavigationBarItem(icon: Icon(Icons.slow_motion_video_sharp),label: ""),
+    BottomNavigationBarItem(icon: CircleAvatar(radius: 16,backgroundImage: NetworkImage(auth.currentUser!.photoURL.toString()),),label: "",),
   ];
 
   final List<Widget> Screens = [
     Home(),
     SearchScreen(),
     AddPost(),
-    LikesScreen(),
+    ReelsSection(),
     ProfileScreen()
   ];
   @override
@@ -86,9 +89,15 @@ class _NavigationFileState extends State<NavigationFile> {
         items: bottomNavItems,
         currentIndex: currentIndex,
         onTap: (index){
-          setState(() {
-            currentIndex = index;
-          });
+          if(index == 2)
+            {
+              Get.to(()=>AddPost(),transition: Transition.downToUp);
+            }
+          else {
+            setState(() {
+              currentIndex = index;
+            });
+          }
         },
       ),
       body: Screens[currentIndex],

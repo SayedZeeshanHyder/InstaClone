@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:instaclone/models/usermodel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:instaclone/navigationfile.dart';
+import 'package:instaclone/screens/details/setdetails.dart';
 import '../../controllers/loadingcontroller.dart';
 import '../../controllers/obscurecontroller.dart';
 
@@ -132,7 +133,7 @@ class SignUp extends StatelessWidget {
                             .updateDisplayName(userNameController.text)
                             .then((value) {
                               Get.back();
-                              Get.off(NavigationFile(),transition: Transition.rightToLeft);
+                              Get.off(()=> SetDetails(),transition: Transition.rightToLeft);
                         })
                             .onError((error, stackTrace) {
                           print("Error in DisplayName ${error.toString()}");

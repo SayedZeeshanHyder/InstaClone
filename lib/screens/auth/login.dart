@@ -51,7 +51,7 @@ class Login extends StatelessWidget {
                 child: TextField(
                   controller: userNameController,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.person),
+                    prefixIcon: Icon(Icons.email),
                     hintText: "Enter Email",
                     border: InputBorder.none,
                   ),
@@ -106,7 +106,7 @@ class Login extends StatelessWidget {
                     if(userNameController.text.isNotEmpty && passwordController.text.isNotEmpty)
                       {
                         auth.signInWithEmailAndPassword(
-                            email: "${userNameController.text}@gmail.com",
+                            email: userNameController.text,
                             password: passwordController.text).then((value){
 
                           //SuccessFul Sign IN

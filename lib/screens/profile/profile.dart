@@ -31,11 +31,6 @@ class ProfileScreen extends StatelessWidget {
         List following = data!['following'];
         final String bio = data!['bio'];
         final String name = data!['name'];
-        final String webLink = data!['webLink'];
-        final String email = data!['email'];
-        final String phone = data!['phone'];
-        final String gender = data!['gender'];
-        final String profileUrl = data!['profileUrl'];
 
         return SingleChildScrollView(
           child: Column(
