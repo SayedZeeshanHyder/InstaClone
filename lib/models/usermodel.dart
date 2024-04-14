@@ -105,43 +105,57 @@ class HeartActivities {
 }
 
 class Posts {
-  String? postId;
-  String? caption;
-  List<String>? img;
-  List<String>? likes;
-  List<Comments>? comments;
-  bool? isImg;
-  String? userUid;
-  int? shares;
+  Posts({
+    required this.tags,
+    required this.by,
+    required this.uid,
+    required this.isImage,
+    required this.images,
+    required this.caption,
+    required this.comments,
+    required this.likes,
+    required this.profileUrl,
+    required this.time,
+  });
+  late final List<dynamic> tags;
+  late final String by;
+  late final String uid;
+  late final bool isImage;
+  late final List<dynamic> images;
+  late final String caption;
+  late final List<dynamic> comments;
+  late final List<dynamic> likes;
+  late final String profileUrl;
+  late final DateTime time;
+  late final String postId;
 
-  Posts({this.caption, this.img, this.likes, this.comments,this.userUid,this.isImg,this.shares,this.postId});
-
-  Posts.fromJson(Map<String, dynamic> json) {
-    userUid = json['userUid'] ?? "";
-    isImg = json['isImg'] ?? false;
-    caption = json['caption'] ?? "";
-    img = json['img'].cast<String>() ?? [];
-    likes = json['likes'].cast<String>() ?? [];
-    if (json['comments'] != null) {
-      comments = <Comments>[];
-      json['comments'].forEach((v) {
-        comments!.add(Comments.fromJson(v));
-      });
-    }
+  Posts.fromJson(Map<String, dynamic> json){
+    tags = json['tags'];
+    postId = json['postId'];
+    by = json['by'];
+    uid = json['uid'];
+    isImage = json['isImage'];
+    images = List.castFrom<dynamic, dynamic>(json['images']);
+    caption = json['caption'];
+    comments = List.castFrom<dynamic, dynamic>(json['comments']);
+    likes = List.castFrom<dynamic, dynamic>(json['likes']);
+    profileUrl = json['profileUrl'];
+    time = json['time'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['caption'] = caption;
-    data['userUid'] = userUid;
-    data['shares'] = shares;
+    final data = <String, dynamic>{};
     data['postId'] = postId;
-    data['isImg'] = isImg;
-    data['img'] = img;
+    data['tags'] = tags;
+    data['by'] = by;
+    data['uid'] = uid;
+    data['isImage'] = isImage;
+    data['images'] = images;
+    data['caption'] = caption;
+    data['comments'] = comments;
     data['likes'] = likes;
-    if (comments != null) {
-      data['comments'] = comments!.map((v) => v.toJson()).toList();
-    }
+    data['profileUrl'] = profileUrl;
+    data['time'] = time;
     return data;
   }
 }

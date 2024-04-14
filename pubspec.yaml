@@ -47,6 +47,7 @@ dependencies:
   reels_viewer: ^1.0.0
   photo_gallery: ^2.2.1
   permission_handler: ^11.3.1
+  uuid: ^4.4.0
 
 dev_dependencies:
 

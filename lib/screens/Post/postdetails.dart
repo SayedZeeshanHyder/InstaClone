@@ -1,13 +1,23 @@
 import 'dart:io';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:instaclone/controllers/postcontroller.dart';
 import 'package:get/get.dart';
+import 'package:instaclone/models/usermodel.dart';
+import 'package:uuid/uuid.dart';
 
 class PostDetailsScreen extends StatelessWidget
 {
+  var uuid = Uuid();
+  final auth = FirebaseAuth.instance;
   final tagsController = TextEditingController();
   final postController = Get.put(PostController());
+  final captionController = TextEditingController();
+  final allPostDoc = FirebaseFirestore.instance.collection("AllPosts").doc("AllPosts");
+  final userCollection = FirebaseFirestore.instance.collection("Users");
+  final storage = FirebaseStorage.instance;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -15,15 +25,86 @@ class PostDetailsScreen extends StatelessWidget
       appBar: AppBar(
         leading: TextButton(
           onPressed: () {
-
+            Get.back();
           },
-          child: Text("Prev"),
+          child: const Text("Prev"),
         ),
-        title: Text("Post"),
+        title: const Text("Post"),
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () async{
 
+              showDialog(context: context, builder: (context){
+                return AlertDialog(
+                  content: SizedBox(
+                    width: size.width*0.7,
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CircularProgressIndicator(color: Colors.blue,),
+                        Text("Uploading Post"),
+                      ],
+                    ),
+                  ),
+                );
+              });
+
+              final getAllPosts = await allPostDoc.get();
+              final List listOfPosts = getAllPosts.exists ? getAllPosts["posts"] : [];
+
+              final getAllUserPosts = await userCollection.doc(auth.currentUser!.uid).get();
+              final List listOfUserPosts = getAllUserPosts['posts'];
+              
+              if(postController.postImagesFiles.length == 1){
+                final filePath = postController.postImagesFiles[0].path;
+                final putFile = await storage.ref(auth.currentUser!.uid).child("Post${listOfUserPosts.length.toString()}").putFile(File(filePath));
+                final downloadUrl = await putFile.ref.getDownloadURL();
+                postController.postImages.add(downloadUrl);
+              }
+              else {
+                for (File i in postController.postImagesFiles) {
+                  final filePath = i.path;
+                  final putFile = await storage.ref(auth.currentUser!.uid)
+                      .child("Post${listOfUserPosts.length.toString()}").child("image${postController.postImagesFiles.indexOf(i)}")
+                      .putFile(File(filePath));
+                  final downloadUrl = await putFile.ref.getDownloadURL();
+                  postController.postImages.add(downloadUrl);
+                }
+              }
+              Map<String,dynamic> postData = {
+                "tags": postController.tags,
+                "by": auth.currentUser!.displayName,
+                "uid": auth.currentUser!.uid,
+                "isImage": true,
+                "images" : postController.postImages,
+                "caption": captionController.text,
+                "comments":[],
+                "likes": [],
+                "profileUrl" : auth.currentUser!.photoURL,
+                "time" : DateTime.now(),
+                "postId": uuid.v4(),
+              };
+              Posts newPost = Posts.fromJson(postData);
+              //Updating All Posts
+              listOfPosts.add(newPost.toJson());
+              await allPostDoc.set({
+                "posts":listOfPosts
+              });
+
+
+              print("Updated All Posts");
+              //Update User Posts
+              
+              listOfUserPosts.add(newPost.toJson());
+              await userCollection.doc(auth.currentUser!.uid).update({
+                "posts":listOfUserPosts
+              });
+              print("All Functions Done");
+              await Get.delete<PostController>();
+              print("postController deleted");
+              Get.back();
+              Get.back();
+              Get.back();
             },
             child: Text("Next"),
           ),
@@ -36,10 +117,10 @@ class PostDetailsScreen extends StatelessWidget
             SizedBox(
               height: size.height*0.01,
             ),
-            postController.postImages.length>1 ?SizedBox(
+            postController.postImagesFiles.length>1 ?SizedBox(
               height: size.height*0.2,
-              child: ListView.builder(scrollDirection: Axis.horizontal,itemCount: postController.postImages.length,itemBuilder: (context,index){
-                File file = postController.postImages[index];
+              child: ListView.builder(scrollDirection: Axis.horizontal,itemCount: postController.postImagesFiles.length,itemBuilder: (context,index){
+                File file = postController.postImagesFiles[index];
                 return Container(
                   margin: EdgeInsets.only(left: size.width*0.03),
                   width: size.width*0.2,
@@ -50,7 +131,7 @@ class PostDetailsScreen extends StatelessWidget
               margin: EdgeInsets.symmetric(horizontal: size.width*0.04),
               width: size.width,
               height: size.height*0.25,
-              child: Image.file(File(postController.postImages[0].path),fit: BoxFit.cover,),
+              child: Image.file(File(postController.postImagesFiles[0].path),fit: BoxFit.cover,),
             ),
             SizedBox(
               height: size.height*0.01,

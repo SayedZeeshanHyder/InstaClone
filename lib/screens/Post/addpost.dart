@@ -83,11 +83,11 @@ class _AddPostState extends State<AddPost> {
                       itemBuilder: (context, index) {
                         return InkWell(
                           onTap: (){
-                            if(postController.postImages.contains(files[index])){
-                              postController.postImages.remove(files[index]);
+                            if(postController.postImagesFiles.contains(files[index])){
+                              postController.postImagesFiles.remove(files[index]);
                             }
                             else{
-                              postController.postImages.add(files[index]);
+                              postController.postImagesFiles.add(files[index]);
                             }
                           },
                           child: Obx(
@@ -95,7 +95,7 @@ class _AddPostState extends State<AddPost> {
                               alignment: Alignment.center,
                               margin: const EdgeInsets.all(2),
                               color: Colors.grey,
-                              child: postController.postImages.contains(files[index]) ? const Icon(Icons.check) : Image.file(files[index]),
+                              child: postController.postImagesFiles.contains(files[index]) ? const Icon(Icons.check) : Image.file(files[index]),
                             ),
                           ),
                         );

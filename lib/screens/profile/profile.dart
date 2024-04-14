@@ -1,16 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:instaclone/controllers/profilescreencontroller.dart';
 import 'package:instaclone/screens/profile/editprofile.dart';
 
 class ProfileScreen extends StatelessWidget {
 
   final FirebaseAuth auth = FirebaseAuth.instance;
-
+  final profileScreenController = Get.put(ProfileScreenController());
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -156,21 +154,42 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              /*ContainedTabBarView(
-                tabBarViewProperties: TabBarViewProperties(physics: NeverScrollableScrollPhysics(),),
-                  tabs: [
-                    Icon(Icons.grid_on),
-                    Icon(Icons.person_pin_outlined)
+              Divider(),
+              Obx(
+                  ()=> Row(
+                  children: [
+                    Expanded(child: InkWell(splashFactory: NoSplash.splashFactory,onTap: (){profileScreenController.index.value = 0;},child: Container(padding: EdgeInsets.symmetric(vertical: size.height*0.01),decoration: BoxDecoration(border: profileScreenController.index.value == 0 ? Border(bottom: BorderSide()): null),alignment: Alignment.center,child:Icon(Icons.grid_on,size: size.width*0.08,),)),),
+                    Expanded(child: InkWell(splashFactory: NoSplash.splashFactory,onTap: (){profileScreenController.index.value = 1;},child: Container(padding: EdgeInsets.symmetric(vertical: size.height*0.01),decoration: BoxDecoration(border: profileScreenController.index.value == 1 ? Border(bottom: BorderSide()): null),alignment: Alignment.center,child: Icon(Icons.person_pin_outlined,size: size.width*0.08,),)),),
                   ],
-                  views: [
-                    Text("Posts Screen"),
-                    Text("Tags Screen"),
-                  ],
-              ),*/
+                ),
+              ),
+              ProfileTabs()
             ],
           ),
         );
       }
     );
+  }
+}
+
+class ProfileTabs extends StatelessWidget
+{
+  final profileScreenController = Get.put(ProfileScreenController());
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    if(profileScreenController.index.value == 0) {
+      return GridView.builder(shrinkWrap: true,physics: NeverScrollableScrollPhysics(),gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: size.width * 0.4),itemCount: 20, itemBuilder: (BuildContext context, int index) {
+        return Container(
+          color: Colors.grey,
+          margin: EdgeInsets.all(3),
+        );
+      },);
+    }
+    else
+      {
+        return Text("Some Other Content");
+      }
   }
 }
