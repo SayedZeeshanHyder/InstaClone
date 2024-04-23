@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:instaclone/screens/home/exploreuser.dart';
 import 'package:instaclone/screens/services/postoperations.dart';
 import 'package:instaclone/screens/services/userinfo.dart';
 import 'package:instaclone/widgets/post/followcard.dart';
@@ -121,7 +123,7 @@ class Home extends StatelessWidget {
                                 children: [
                                   InkWell(
                                     onTap: () {
-                                      print("Go to User Profiel");
+                                      Get.to(()=> ExploreUser(userUid: postData['uid'],),transition: Transition.rightToLeft);
                                     },
                                     child: Text(
                                       postData['by'],

@@ -163,7 +163,7 @@ class ProfileScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              ProfileTabs()
+              ProfileTabs(posts: posts,)
             ],
           ),
         );
@@ -174,16 +174,20 @@ class ProfileScreen extends StatelessWidget {
 
 class ProfileTabs extends StatelessWidget
 {
+  final List posts;
+  ProfileTabs({required this.posts});
   final profileScreenController = Get.put(ProfileScreenController());
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     if(profileScreenController.index.value == 0) {
       return GridView.builder(shrinkWrap: true,physics: NeverScrollableScrollPhysics(),gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: size.width * 0.4),itemCount: 20, itemBuilder: (BuildContext context, int index) {
+          maxCrossAxisExtent: size.width * 0.4),itemCount: posts.length, itemBuilder: (BuildContext context, int index) {
+        final post = posts[index];
         return Container(
-          color: Colors.grey,
-          margin: EdgeInsets.all(3),
+          decoration: BoxDecoration(
+            image: DecorationImage(image: NetworkImage(post["images"][0]))
+          ),
         );
       },);
     }
