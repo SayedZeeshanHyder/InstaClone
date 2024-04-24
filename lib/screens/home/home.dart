@@ -1,12 +1,13 @@
+import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:instaclone/screens/home/exploreuser.dart';
 import 'package:instaclone/screens/services/postoperations.dart';
-import 'package:instaclone/screens/services/userinfo.dart';
 import 'package:instaclone/widgets/post/followcard.dart';
 
 class Home extends StatelessWidget {
@@ -54,20 +55,20 @@ class Home extends StatelessWidget {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator(),);
                 }
                 List listOfAllPosts;
                 try {
                   listOfAllPosts = snapshot.data!.data()!["posts"];
                 } catch (e) {
-                  return Center(child: Text("No Posts Available"));
+                  return const Center(child: Text("No Posts Available"),);
                 }
 
                 return ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: listOfAllPosts.length,
-                    itemBuilder: (context, index){
+                    itemBuilder: (context, index) {
                       if (listOfAllPosts[index]['uid'] ==
                           auth.currentUser!.uid) {
                         return const SizedBox();
@@ -123,7 +124,11 @@ class Home extends StatelessWidget {
                                 children: [
                                   InkWell(
                                     onTap: () {
-                                      Get.to(()=> ExploreUser(userUid: postData['uid'],),transition: Transition.rightToLeft);
+                                      Get.to(
+                                          () => ExploreUser(
+                                                userUid: postData['uid'],
+                                              ),
+                                          transition: Transition.rightToLeft);
                                     },
                                     child: Text(
                                       postData['by'],
@@ -189,7 +194,60 @@ class Home extends StatelessWidget {
                                 ),
                               ),
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  showFlexibleBottomSheet(
+                                    initHeight: 0.8,
+                                    maxHeight: 0.9,
+                                      bottomSheetBorderRadius: BorderRadius.vertical(top: Radius.circular(size.width*0.05),),
+                                      context: context,
+                                      builder: (context, controller, offset) {
+                                        return Column(
+                                          children: [
+                                            SizedBox(
+                                              height: size.height*0.015,
+                                            ),
+                                            Text("Comments",style: TextStyle(fontWeight: FontWeight.bold,fontSize: size.width*0.05),),
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                  width: size.width*0.06,
+                                                ),
+                                                Expanded(child: Divider(),),
+                                                SizedBox(
+                                                  width: size.width*0.06,
+                                                ),
+                                              ],
+                                            ),
+                                            Expanded(
+                                              child: ListView.builder(itemCount: 20,itemBuilder: (context,index){
+                                                return ListTile(
+                                                  leading: CircleAvatar(
+                                                    radius: size.width*0.05,
+                                                  ),
+                                                  title: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Text("thelegend101z",style: TextStyle(fontWeight: FontWeight.bold),),
+                                                          SizedBox(
+                                                            width: size.width*0.02,
+                                                          ),
+                                                          Text("8w",style: TextStyle(fontSize: size.width*0.0375,color: Colors.grey),),
+                                                        ],
+                                                      ),
+                                                      Text("Just writing the Comment trying zyada ",style: TextStyle(fontSize: size.width*0.0375),),
+                                                      Text("Reply",style: TextStyle(fontSize: size.width*0.0375,color: Colors.grey),)
+                                                    ],
+                                                  ),
+                                                  trailing: IconButton(onPressed: (){}, icon: Icon(FontAwesomeIcons.heart),),
+                                                );
+                                              }),
+                                            ),
+                                          ],
+                                        );
+                                      });
+                                },
                                 icon: FaIcon(FontAwesomeIcons.comment),
                               ),
                               IconButton(
@@ -198,8 +256,9 @@ class Home extends StatelessWidget {
                               ),
                               Spacer(),
                               IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.bookmark_border))
+                                onPressed: () {},
+                                icon: Icon(Icons.bookmark_border),
+                              ),
                             ],
                           ),
                           postData["likes"].isNotEmpty
@@ -228,7 +287,7 @@ class Home extends StatelessWidget {
                                     )
                                   ],
                                 )
-                              : SizedBox(),
+                              : const SizedBox(),
                           Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: size.width * 0.04,
@@ -257,7 +316,7 @@ class Home extends StatelessWidget {
                             padding: EdgeInsets.only(left: size.width * 0.04),
                             child: Text(
                               "${postData['comments'].length} comments",
-                              style: TextStyle(color: Colors.grey),
+                              style: const TextStyle(color: Colors.grey),
                             ),
                           ),
                           SizedBox(

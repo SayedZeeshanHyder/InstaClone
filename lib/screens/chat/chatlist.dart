@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:instaclone/screens/chat/chatscreen.dart';
 
 class ChatList extends StatelessWidget {
   final auth = FirebaseAuth.instance;
@@ -48,32 +50,37 @@ class ChatList extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: size.width*0.04,vertical: size.height*0.01),
-                    child: Row(
-                      children:[
-                        CircleAvatar(
-                          radius: size.width*0.08,
-                        ),
-                        SizedBox(
-                          width: size.width*0.03,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("UserName",style: TextStyle(fontWeight: FontWeight.w500),),
-                            Row(
-                              children: [
-                                Text("Have a Nice Day Bro!",style: TextStyle(color: Colors.grey.shade500),),
-                                SizedBox(
-                                  width: size.width*0.1,
-                                ),
-                                Text("20m",style: TextStyle(color: Colors.grey),),
-                              ],
-                            )
-                          ],
-                        ),
-                        Spacer(),
-                        IconButton(onPressed: (){}, icon: Icon(Icons.camera_alt_outlined,color: Colors.blue,),),
-                      ],
+                    child: InkWell(
+                      onTap: (){
+                        Get.to(()=> ChatScreen(),transition: Transition.rightToLeft);
+                      },
+                      child: Row(
+                        children:[
+                          CircleAvatar(
+                            radius: size.width*0.08,
+                          ),
+                          SizedBox(
+                            width: size.width*0.03,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text("UserName",style: TextStyle(fontWeight: FontWeight.w500),),
+                              Row(
+                                children: [
+                                  Text("Have a Nice Day Bro!",style: TextStyle(color: Colors.grey.shade500),),
+                                  SizedBox(
+                                    width: size.width*0.1,
+                                  ),
+                                  const Text("20m",style: TextStyle(color: Colors.grey),),
+                                ],
+                              )
+                            ],
+                          ),
+                          Spacer(),
+                          IconButton(onPressed: (){}, icon: Icon(Icons.camera_alt_outlined,color: Colors.blue,),),
+                        ],
+                      ),
                     ),
                   );
                 }),

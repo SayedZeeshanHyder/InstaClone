@@ -48,6 +48,7 @@ dependencies:
   photo_gallery: ^2.2.1
   permission_handler: ^11.3.1
   uuid: ^4.4.0
+  bottom_sheet: ^4.0.4
 
 dev_dependencies:
 
