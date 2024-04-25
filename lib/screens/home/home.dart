@@ -146,7 +146,7 @@ class Home extends StatelessWidget {
                               Spacer(),
                               IconButton(
                                 onPressed: () {},
-                                icon: Icon(Icons.more_horiz),
+                                icon: const Icon(Icons.more_horiz),
                               ),
                             ],
                           ),

@@ -29,7 +29,7 @@ class ChatScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(itemCount: 5,itemBuilder: (context,index){
+            child: ListView.builder(reverse: true,itemCount: 5,itemBuilder: (context,index){
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(

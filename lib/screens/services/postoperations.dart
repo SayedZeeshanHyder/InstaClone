@@ -46,4 +46,30 @@ class PostOperations extends GetxController
       "posts":listOfAllPosts
     });
   }
+
+  static followUser(String userUid)
+  async{
+    final get = await FirebaseFirestore.instance.collection("Users").doc(userUid).get();
+    List listOfFollowers = get.data()!["followers"];
+    listOfFollowers.add(auth.currentUser!.uid);
+    await FirebaseFirestore.instance.collection("Users").doc(userUid).update(
+      {
+        "followers":listOfFollowers
+      }
+    );
+    print("followed");
+  }
+
+  static unFollow(String userUid)
+  async{
+    final get = await FirebaseFirestore.instance.collection("Users").doc(userUid).get();
+    List listOfFollowers = get.data()!["followers"];
+    listOfFollowers.remove(auth.currentUser!.uid);
+    await FirebaseFirestore.instance.collection("Users").doc(userUid).update(
+        {
+          "followers":listOfFollowers
+        }
+    );
+    print("Unfollowed");
+  }
 }
