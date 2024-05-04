@@ -1,10 +1,11 @@
-import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:instaclone/screens/likes/following.dart';
-import 'package:instaclone/screens/likes/you.dart';
 
 class LikesScreen extends StatelessWidget
 {
+  final auth = FirebaseAuth.instance;
+  final userCollection = FirebaseFirestore.instance.collection("Users");
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -13,15 +14,22 @@ class LikesScreen extends StatelessWidget
         centerTitle: true,
         title: Text("Likes"),
       ),
-      body: ContainedTabBarView(
-          tabs: [
-            Text("Following"),
-            Text("You")
-          ],
-          views: [
-            Following(),
-            You(),
-          ],
+      body: StreamBuilder(
+        stream: userCollection.doc(auth.currentUser!.uid).snapshots(),
+        builder: (context, snapshot) {
+
+          if(snapshot.connectionState == ConnectionState.waiting)
+            {
+              return const Center(child: CircularProgressIndicator(),);
+            }
+          final data = snapshot.data!.data();
+          print(data!['notification']);
+          return Column(
+            children: [
+
+            ],
+          );
+        }
       ),
     );
   }

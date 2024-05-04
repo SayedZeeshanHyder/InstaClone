@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:instaclone/screens/Post/addpost.dart';
@@ -63,7 +62,7 @@ class _NavigationFileState extends State<NavigationFile> {
 
 
   final bottomNavItems = [
-    BottomNavigationBarItem(icon: SizedBox(width: 20,height: 20,child: SvgPicture.asset('assets/icons/homeOutline.svg',fit: BoxFit.contain,),),activeIcon: SizedBox(width: 20,height: 20,child: SvgPicture.asset('assets/icons/homeFilled.svg')),label: ""),
+    BottomNavigationBarItem(icon: SizedBox(width: 20,height: 20,child: Image.asset('assets/icons/homeOutline.svg',fit: BoxFit.contain,),),activeIcon: SizedBox(width: 20,height: 20,child: Image.asset('assets/icons/homeFilled.svg')),label: ""),
     const BottomNavigationBarItem(icon: Icon(CupertinoIcons.search),label: "",),
     const BottomNavigationBarItem(icon: Icon(Icons.add_box_outlined),label: ''),
     const BottomNavigationBarItem(icon: Icon(Icons.slow_motion_video_sharp),label: ""),

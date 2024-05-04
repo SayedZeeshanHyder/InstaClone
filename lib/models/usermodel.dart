@@ -128,6 +128,7 @@ class Posts {
   late final String profileUrl;
   late final DateTime time;
   late final String postId;
+  late final List<dynamic> notification;
 
   Posts.fromJson(Map<String, dynamic> json){
     tags = json['tags'];
@@ -141,11 +142,13 @@ class Posts {
     likes = List.castFrom<dynamic, dynamic>(json['likes']);
     profileUrl = json['profileUrl'];
     time = json['time'];
+    notification = List.castFrom<dynamic, dynamic>(json['notification']);
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['postId'] = postId;
+    data['notification'] = notification;
     data['tags'] = tags;
     data['by'] = by;
     data['uid'] = uid;

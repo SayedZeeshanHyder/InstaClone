@@ -36,7 +36,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   font_awesome_flutter: ^10.7.0
-  flutter_svg: ^2.0.10+1
   firebase_core: ^2.28.0
   firebase_auth: ^4.19.0
   cloud_firestore: ^4.16.0
@@ -44,11 +43,11 @@ dependencies:
   firebase_storage: ^11.7.0
   image_picker: ^1.0.7
   contained_tab_bar_view: ^0.8.0
-  reels_viewer: ^1.0.0
   photo_gallery: ^2.2.1
   permission_handler: ^11.3.1
   uuid: ^4.4.0
   bottom_sheet: ^4.0.4
+  zego_uikit_prebuilt_live_streaming: ^3.5.4
 
 dev_dependencies:
 

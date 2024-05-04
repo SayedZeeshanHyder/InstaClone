@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:reels_viewer/reels_viewer.dart';
+//import 'package:reels_viewer/reels_viewer.dart';
 class ReelsSection extends StatelessWidget
 {
-  List<ReelModel> reelsList = [
+  /*List<ReelModel> reelsList = [
     ReelModel(
         'https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4',
         'Darshan Patil',
@@ -48,11 +48,11 @@ class ReelsSection extends StatelessWidget
       'https://assets.mixkit.co/videos/preview/mixkit-mother-with-her-little-daughter-eating-a-marshmallow-in-nature-39764-large.mp4',
       'Rahul',
     ),
-  ];
+  ];*/
   @override
   Widget build(BuildContext context)
   {
-    return ReelsViewer(
+    return /*ReelsViewer(
         reelsList: reelsList,
         appbarTitle: 'Instagram Reels',
         onShare: (url) {
@@ -79,6 +79,6 @@ class ReelsSection extends StatelessWidget
         showProgressIndicator: true,
         showVerifiedTick: false,
         showAppbar: false,
-    );
+    );*/ SizedBox();
   }
 }

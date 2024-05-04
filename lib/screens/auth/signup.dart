@@ -126,7 +126,7 @@ class SignUp extends StatelessWidget {
                               password: passwordController.text)
                           .then((value) async {
 
-                        final map = {"email":userNameController.text,"uid":value.user!.uid, "profileUrl": "", "followers": [], "following": [], "createdAt": DateTime.now(), "searchHistory": [],'posts':[],'heartAct':[],'bio':"Hello I am ${userNameController.text}"};
+                        final map = {"email":userNameController.text,"uid":value.user!.uid, "profileUrl": "", "followers": [], "following": [], "createdAt": DateTime.now(), "searchHistory": [],'posts':[],'heartAct':[],'bio':"Hello I am ${userNameController.text}","notification":[]};
                         UserModel userModel = UserModel.fromJson(map);
                         await userCollection.doc(value.user!.uid).set(userModel.toJson());
                         value.user!

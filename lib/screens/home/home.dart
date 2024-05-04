@@ -7,8 +7,11 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:instaclone/screens/home/exploreuser.dart';
+import 'package:instaclone/screens/home/viewstory.dart';
 import 'package:instaclone/screens/services/postoperations.dart';
+import 'package:instaclone/widgets/live/prelive.dart';
 import 'package:instaclone/widgets/post/followcard.dart';
+import 'package:instaclone/widgets/live/livescreen.dart';
 
 class Home extends StatelessWidget {
   final auth = FirebaseAuth.instance;
@@ -31,11 +34,17 @@ class Home extends StatelessWidget {
                     padding: EdgeInsets.all(size.width * 0.015),
                     child: Column(
                       children: [
-                        CircleAvatar(
-                          backgroundColor: Colors.pinkAccent,
-                          radius: size.width * 0.1,
+                        InkWell(
+                          onTap: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>ViewStory(tag: "StoryId$index"),),);
+                          },
                           child: CircleAvatar(
-                            radius: size.width * 0.093,
+                            backgroundColor: Colors.pinkAccent,
+                            radius: size.width * 0.1,
+                            child: CircleAvatar(
+                              radius: size.width * 0.093,
+                              child: Hero(tag: "StoryId$index",child: Image.network("https://t3.ftcdn.net/jpg/06/06/79/70/240_F_606797008_rGPPk6bFWDQydnX7g7w1w9dVVZ4mD22J.jpg",fit: BoxFit.fill,),),
+                            ),
                           ),
                         ),
                         SizedBox(
@@ -46,6 +55,14 @@ class Home extends StatelessWidget {
                     ),
                   );
                 }),
+          ),
+          Divider(),
+          ListTile(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> PreLive(),),);
+            },
+            title: Text("Live Screen"),
+            leading: Icon(Icons.live_tv),
           ),
           Divider(),
           StreamBuilder(
