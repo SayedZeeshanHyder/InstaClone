@@ -9,6 +9,9 @@ class PostOperations extends GetxController
 
   static likeAPost(updatePost)
   async{
+
+    final userDoc = FirebaseFirestore.instance.collection("Users").doc(updatePost["uid"]);
+
     final get = await doc.get();
     List listOfAllPosts = get.exists ? get.data()!["posts"] : [];
     for(dynamic i in listOfAllPosts)
@@ -25,10 +28,30 @@ class PostOperations extends GetxController
     await doc.update({
       "posts":listOfAllPosts
     });
+
+    final get2 = await userDoc.get();
+    listOfAllPosts = get2.exists ? get2.data()!["posts"] : [];
+    for(dynamic i in listOfAllPosts)
+    {
+      if(i["postId"] == updatePost["postId"])
+      {
+        List likes = i['likes'];
+        likes.add(auth.currentUser!.uid);
+        print("Post Liked");
+        break;
+      }
+    }
+
+    await userDoc.update({
+      "posts":listOfAllPosts
+    });
+
   }
 
   static unlikeAPost(updatePost)
   async{
+    final userDoc = FirebaseFirestore.instance.collection("Users").doc(updatePost["uid"]);
+
     final get = await doc.get();
     List listOfAllPosts = get.exists ? get.data()!["posts"] : [];
     for(dynamic i in listOfAllPosts)
@@ -43,6 +66,23 @@ class PostOperations extends GetxController
     }
 
     await doc.update({
+      "posts":listOfAllPosts
+    });
+
+    final get2 = await userDoc.get();
+    listOfAllPosts = get2.exists ? get2.data()!["posts"] : [];
+    for(dynamic i in listOfAllPosts)
+    {
+      if(i["postId"] == updatePost["postId"])
+      {
+        List likes = i['likes'];
+        likes.remove(auth.currentUser!.uid);
+        print("Post Liked");
+        break;
+      }
+    }
+
+    await userDoc.update({
       "posts":listOfAllPosts
     });
   }
@@ -71,5 +111,31 @@ class PostOperations extends GetxController
         }
     );
     print("Unfollowed");
+  }
+
+  static sendLikedNotification(postData)
+  async {
+    final userDoc = FirebaseFirestore.instance.collection("Users").doc(postData["uid"]);
+    final get = await userDoc.get();
+    List listOfNotification = get.exists ? get.data()!['notification'] : [];
+    final notification = {"postId": postData["postId"], "time": DateTime.now(), "postImageUrl": postData['images'][0], "message": "Liked your post", "oppUserProfileUrl": auth.currentUser!.photoURL, "oppUser": auth.currentUser!.uid,"oppUserName":auth.currentUser!.displayName};
+    listOfNotification.insert(0,notification);
+    await userDoc.update(
+      {"notification" : listOfNotification,}
+    );
+    print("Like Notification sent to User");
+  }
+
+  static sendFollowNotification(data)
+  async {
+    final userDoc = FirebaseFirestore.instance.collection("Users").doc(data["uid"]);
+    final get = await userDoc.get();
+    List listOfNotification = get.exists ? get.data()!['notification'] : [];
+    final notification = {"postId": "", "time": DateTime.now(), "postImageUrl": "", "message": "Started following you", "oppUserProfileUrl": auth.currentUser!.photoURL, "oppUser": auth.currentUser!.uid,"oppUserName":auth.currentUser!.displayName};
+    listOfNotification.insert(0,notification);
+    await userDoc.update(
+        {"notification" : listOfNotification,}
+    );
+    print("Follow Notification sent to User");
   }
 }

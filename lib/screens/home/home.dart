@@ -195,7 +195,8 @@ class Home extends StatelessWidget {
                                       .contains(auth.currentUser!.uid)) {
                                     PostOperations.unlikeAPost(postData);
                                   } else {
-                                    PostOperations.likeAPost(postData);
+                                    await PostOperations.likeAPost(postData);
+                                    await PostOperations.sendLikedNotification(postData);
                                   }
                                 },
                                 icon: Icon(

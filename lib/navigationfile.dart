@@ -62,7 +62,7 @@ class _NavigationFileState extends State<NavigationFile> {
 
 
   final bottomNavItems = [
-    BottomNavigationBarItem(icon: SizedBox(width: 20,height: 20,child: Image.asset('assets/icons/homeOutline.svg',fit: BoxFit.contain,),),activeIcon: SizedBox(width: 20,height: 20,child: Image.asset('assets/icons/homeFilled.svg')),label: ""),
+    const BottomNavigationBarItem(icon: SizedBox(width: 20,height: 20,child: Icon(Icons.home),),activeIcon: SizedBox(width: 20,height: 20,child: Icon(Icons.home),),label: ""),
     const BottomNavigationBarItem(icon: Icon(CupertinoIcons.search),label: "",),
     const BottomNavigationBarItem(icon: Icon(Icons.add_box_outlined),label: ''),
     const BottomNavigationBarItem(icon: Icon(Icons.slow_motion_video_sharp),label: ""),

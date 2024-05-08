@@ -132,6 +132,7 @@ class ExploreUser extends StatelessWidget {
                               PostOperations.unFollow(data['uid']);
                             } else {
                               PostOperations.followUser(data["uid"]);
+                              PostOperations.sendFollowNotification(data);
                             }
                           },
                           child: Container(
