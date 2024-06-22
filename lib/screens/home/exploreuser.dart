@@ -45,6 +45,7 @@ class ExploreUser extends StatelessWidget {
             final String bio = data['bio'];
             final String name = data['name'];
             final String profileUrl = data['profileUrl'];
+            final doesFollow = followers.where((element) => element['uid'] == auth.currentUser!.uid);
 
             return SingleChildScrollView(
               child: Column(
@@ -128,10 +129,11 @@ class ExploreUser extends StatelessWidget {
                         flex: 6,
                         child: InkWell(
                           onTap: () {
-                            if (followers.contains(auth.currentUser!.uid)) {
+
+                            if (doesFollow.isNotEmpty) {
                               PostOperations.unFollow(data['uid']);
                             } else {
-                              PostOperations.followUser(data["uid"]);
+                              PostOperations.followUser(data["uid"],data['name']);
                               PostOperations.sendFollowNotification(data);
                             }
                           },
@@ -142,7 +144,7 @@ class ExploreUser extends StatelessWidget {
                                 color: Colors.black,
                                 borderRadius:
                                     BorderRadius.circular(size.width * 0.035)),
-                            child: followers.contains(auth.currentUser!.uid)
+                            child: doesFollow.isNotEmpty
                                 ? Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                                     children: [

@@ -29,6 +29,7 @@ class ProfileScreen extends StatelessWidget {
         List following = data!['following'];
         final String bio = data!['bio'];
         final String name = data!['name'];
+        final String photoUrl = data["profileUrl"];
 
         return SingleChildScrollView(
           child: Column(
@@ -45,6 +46,7 @@ class ProfileScreen extends StatelessWidget {
                     radius: size.width * 0.135,
                     child: CircleAvatar(
                       radius: size.width * 0.125,
+                      backgroundImage: NetworkImage(photoUrl),
                     ),
                   ),
                   Column(

@@ -87,16 +87,35 @@ class PostOperations extends GetxController
     });
   }
 
-  static followUser(String userUid)
+  static followUser(String userUid,String userName)
   async{
     final get = await FirebaseFirestore.instance.collection("Users").doc(userUid).get();
     List listOfFollowers = get.data()!["followers"];
-    listOfFollowers.add(auth.currentUser!.uid);
+    final followerInfo = {
+      "uid":auth.currentUser!.uid,
+      "name":auth.currentUser!.displayName
+    };
+    listOfFollowers.add(followerInfo);
     await FirebaseFirestore.instance.collection("Users").doc(userUid).update(
       {
         "followers":listOfFollowers
       }
     );
+
+    final get2 = await FirebaseFirestore.instance.collection("Users").doc(auth.currentUser!.uid).get();
+    listOfFollowers = get2.data()!["following"];
+    final followerInfo2 = {
+      "uid":userUid,
+      "name":userName
+    };
+    listOfFollowers.add(followerInfo2);
+    await FirebaseFirestore.instance.collection("Users").doc(auth.currentUser!.uid).update(
+        {
+          "following":listOfFollowers
+        }
+    );
+
+
     print("followed");
   }
 
@@ -104,12 +123,22 @@ class PostOperations extends GetxController
   async{
     final get = await FirebaseFirestore.instance.collection("Users").doc(userUid).get();
     List listOfFollowers = get.data()!["followers"];
-    listOfFollowers.remove(auth.currentUser!.uid);
+    listOfFollowers.removeWhere((element) => element['uid']==auth.currentUser!.uid);
     await FirebaseFirestore.instance.collection("Users").doc(userUid).update(
         {
           "followers":listOfFollowers
         }
     );
+
+    final get2 = await FirebaseFirestore.instance.collection("Users").doc(auth.currentUser!.uid).get();
+    listOfFollowers = get2.data()!["following"];
+    listOfFollowers.removeWhere((element) => element['uid']==userUid);
+    await FirebaseFirestore.instance.collection("Users").doc(auth.currentUser!.uid).update(
+        {
+          "following":listOfFollowers
+        }
+    );
+    print(userUid);
     print("Unfollowed");
   }
 

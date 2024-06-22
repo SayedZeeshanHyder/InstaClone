@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 class ChatScreen extends StatelessWidget {
 
+  final String chatRoomId;
+  ChatScreen({required this.chatRoomId});
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
